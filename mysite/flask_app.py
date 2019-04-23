@@ -10,6 +10,9 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello from Flask!'
 
+@app.route("/login/")
+def login():
+    return render_template("login_page.html")
 
 @app.route('/hello/John')
 def john():
