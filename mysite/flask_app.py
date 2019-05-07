@@ -14,10 +14,10 @@ app.config["DEBUG"] = True
 app.config['TESTING'] = False
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
-    username="cindy2bhuppal",
-    password="school123",
-    hostname="cindy2bhuppal.mysql.pythonanywhere-services.com",
-    databasename="cindy2bhuppal$comments",
+    username="SchoolGradeBook",
+    password="Saibaba123!",
+    hostname="SchoolGradeBook.mysql.pythonanywhere-services.com",
+    databasename="SchoolGradeBook$schoolgradebook",
 )
 app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
@@ -26,7 +26,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-app.secret_key = "Saibaba"
+app.secret_key = "SchoolGradeBook"
 login_manager = LoginManager()
 login_manager.init_app(app)
 
