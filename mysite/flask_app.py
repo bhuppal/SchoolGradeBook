@@ -97,12 +97,3 @@ def index():
     db.session.commit()
     return redirect(url_for('index'))
 
-
-@app.route('/home')
-def home():
-    """Renders the home page."""
-    return render_template(
-        'index.jade',
-        title='Home Page',
-        year=datetime.now().year,
-    )
