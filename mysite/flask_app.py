@@ -1,4 +1,3 @@
-
 # A very simple Flask Hello World app for you to get started with...
 from datetime import datetime
 from flask import Flask, redirect, render_template, request, url_for
