@@ -7,7 +7,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
-    <title>Bhuppal's scratchboard page</title>
+    <title>Buppal & Cindy Project</title>
 
     <style type="text/css">
 :root {
@@ -155,16 +155,18 @@ h1 {
 
 <div class="container">
     <div class="row">
-      <div  class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div  class="col-sm-9 col-md-8 col-lg-5 mx-auto">
         <div id="logincard" class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center">Sign In</h5>
+            <div class="form-label-group">
             {% if error %}
                   <span class="alert alert-error text-danger small">
                       <a class="close text-danger" data-dismiss="alert" href="#">×</a>
                   Incorrect Username or Password!
                   </span>
             {% endif %}
+            </div>
             <form class="form-signin" action="." method="post">
               <div class="form-label-group">
                 <input type="text" id="username" name="username" class="form-control" placeholder="User Name" required autofocus>

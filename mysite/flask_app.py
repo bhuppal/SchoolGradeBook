@@ -59,6 +59,7 @@ class Comment(db.Model):
 
 #comments = []
 
+
 @app.route("/login/", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -76,11 +77,12 @@ def login():
 
 
 
-@app.route("/logout/")
+@app.route('/logout/')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
+
 
 
 @app.route('/', methods=["GET","POST"])
@@ -96,4 +98,17 @@ def index():
     db.session.add(comment)
     db.session.commit()
     return redirect(url_for('index'))
+
+
+
+@app.route('/documentation', methods=["GET","POST"])
+def documentation():
+    if request.method == "GET":
+        return render_template("documentation.html", comments=Comment.query.all(), timestamp=datetime.now())
+
+    if not current_user.is_authenticated:
+        return redirect(url_for('documentation'))
+
+
+    return redirect(url_for('documentation'))
 
