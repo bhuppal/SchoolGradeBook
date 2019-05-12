@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+
+{% block content %}
+   <!-- cards -->
+
+   <!-- cards -->
+    <section>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
+                <br/>
+<h1>Instructor Details</h1>
+   <div style="margin-left:20px">
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+</div>
+
+        </div>
+      </div>
+
+    </section>
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+ $(document).ready(function () {
+            $("#jqGrid").jqGrid({
+                colModel: [
+                    {
+						label: 'Title',
+                        name: 'title',
+                        width: 60
+                    },
+                    {
+						label: 'Frist Name',
+                        name: 'first_name',
+                        width: 120
+                    },
+                    {
+						label: 'Last Name',
+                        name: 'last_name',
+                        width: 120
+                    },
+                    {
+						label: 'Email',
+                        name: 'email',
+                        width: 150
+                    },
+                    {
+						label: 'Phone',
+                        name: 'phone',
+                        width: 120
+                    },
+                    {
+						label: 'Position',
+                        name: 'position',
+                        width: 150
+                    },
+                    {
+						label: 'Notes',
+                        name: 'notes',
+                        width: 400
+                    }
+                ],
+
+                viewrecords: true, // show the current page, data rang and total records on the toolbar
+               autowidth: true,
+                shrinkToFit: true,
+                rowNum: 15,
+				datatype: 'local',
+                pager: "#jqGridPager",
+				caption: "Load live data from http://schoolgradebook.pythonanywhere.com/api/instructors"
+            });
+
+            fetchGridData();
+
+            function fetchGridData() {
+
+                var gridArrayData = [];
+				// show loading message
+				$("#jqGrid")[0].grid.beginReq();
+                $.ajax({
+                    url: "http://schoolgradebook.pythonanywhere.com/api/instructors?order=desc&sort=activity&tagged=jqgrid&site=pythonanywhere",
+                    success: function (result) {
+                        for (var i = 0; i < result.instructor.length; i++) {
+                            var item = result.instructor[i];
+                            gridArrayData.push({
+                                ID: item.id,
+                                title: item.title,
+                                first_name: item.first_name,
+                                last_name: item.last_name,
+                                email: item.email,
+                                phone: item.phone,
+                                position: item.position,
+                                notes: item.notes
+                            });
+                        }
+						// set the new data
+						$("#jqGrid").jqGrid('setGridParam', { data: gridArrayData});
+						// hide the show message
+						$("#jqGrid")[0].grid.endReq();
+						// refresh the grid
+						$("#jqGrid").trigger('reloadGrid');
+                    }
+                });
+            }
+
+
+        });
+ $.jgrid.defaults.styleUI = 'Bootstrap4';
+$.jgrid.defaults.iconSet = 'Octicons';
+</script>
+
+{% endblock %}
+
+    <!-- end of cards -->
+{% endblock %}

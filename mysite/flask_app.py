@@ -1,11 +1,12 @@
 # A very simple Flask Hello World app for you to get started with...
 from datetime import datetime
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import login_user, LoginManager, UserMixin, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash
-
+from instructor import Instructor
+import json
 
 app = Flask(__name__)
 
@@ -43,21 +44,69 @@ class User(UserMixin, db.Model):
         return self.username
 
 
+
+class Instructor(db.Model):
+    __tablename__ = "sgb_Instructor"
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(150))
+    last_name = db.Column(db.String(150))
+    title = db.Column(db.String(10))
+    position  = db.Column(db.String(50))
+    email = db.Column(db.String(100))
+    phone = db.Column(db.String(100))
+    notes = db.Column(db.String(500))
+    instructor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    Instructor_key = db.relationship('User', foreign_keys=instructor_id)
+
+    def json(self):
+        return {
+                'id': self.id,
+                'first_name': self.first_name,
+                'last_name': self.last_name,
+                'title': self.title,
+                'position': self.position,
+                'email': self.email,
+                'phone': self.phone,
+                'notes': self.notes,
+                'instructor_id': self.instructor_id
+        }
+
+
+    def get_all_instructors():
+        return [Instructor.json(instructor) for instructor in Instructor.query.all()]
+
+    def __repr__(self):
+        instructor_object = {
+                'id': self.id,
+                'first_name': self.first_name,
+                'last_name': self.last_name,
+                'title': self.title,
+                'position': self.position,
+                'email': self.email,
+                'phone': self.phone,
+                'notes': self.notes,
+                'instructor_id': self.instructor_id
+        }
+        return json.dumps(instructor_object)
+
+
+class Course(db.Model):
+    __tablename__ = "sgb_Course"
+
+    id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.String(150))
+    course_name = db.Column(db.String(150))
+    course_description = db.Column(db.String(4000))
+    course_schedule = db.Column(db.String(200))
+    course_startdate = db.Column(db.Date)
+    course_enddate = db.Column(db.Date)
+    course_id = db.Column(db.Integer, db.ForeignKey('sgb_Instructor.id'), nullable=True)
+    Course_key = db.relationship('sgb_Instructor', foreign_keys=course_id)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(username=user_id).first()
-
-class Comment(db.Model):
-
-    __tablename__ = "comments"
-
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(4096))
-    posted = db.Column(db.DateTime, default=datetime.now)
-    commenter_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    commenter = db.relationship('User', foreign_keys=commenter_id)
-
-#comments = []
 
 
 @app.route("/login/", methods=["GET", "POST"])
@@ -91,19 +140,38 @@ def index():
         return render_template("main_page.html", timestamp=datetime.now(),title = 'Student Details')
 
     if not current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return render_template("login_page.html", error=True)
 
     return redirect(url_for('index'))
 
+
+@app.route('/instructor', methods=["GET","POST"])
+def instructor():
+    if request.method == "GET":
+        return render_template("instructor.html", timestamp=datetime.now(), title = 'Instructor Details')
+
+    if not current_user.is_authenticated:
+        return render_template("login_page.html", error=True)
+
+    return redirect(url_for('instructor'))
 
 
 @app.route('/documentation', methods=["GET","POST"])
 def documentation():
     if request.method == "GET":
-        return render_template("documentation.html", comments=Comment.query.all(), timestamp=datetime.now(), title = 'Documentation Details')
+        return render_template("documentation.html", timestamp=datetime.now(), title = 'Documentation Details')
 
     if not current_user.is_authenticated:
-        return redirect(url_for('documentation'))
-
+        return render_template("login_page.html", error=True)
 
     return redirect(url_for('documentation'))
+
+
+@app.route('/api/instructors', methods=['GET'])
+def get_instructor():
+    return jsonify({'instructor': Instructor.get_all_instructors()})
+
+
+
+
+

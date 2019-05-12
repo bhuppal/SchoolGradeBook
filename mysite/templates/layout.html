@@ -1,16 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <link rel="title icon" href="static/images/graduation-cap-300.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <!-- A link to a Bootstrap css -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+   <!-- A link to a Octicons css -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.css">
+   <!-- A link to a jqGrid Bootstrap 4 css -->
+   <link rel="stylesheet" type="text/css" media="screen" href="static/css/ui.jqgrid-bootstrap4.css" />
+
+    <script type="text/ecmascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+
+
+   <!-- This is the localization file of the grid controlling messages, labels, etc.
+   <!-- We support more than 40 localizations -->
+   <script type="text/ecmascript" src="static/js/i18n/grid.locale-en.js"></script>
+   <!-- This is the Javascript file of jqGrid -->
+   <script type="text/ecmascript" src="static/js/jquery.jqGrid.min.js"></script>
+   <!-- Optional Bootstrap JavaScript files -->
+
+
+
+
+
+
     <link rel="stylesheet" href="static/css/style.css">
 
     <title>Bhuppal & Cindy Project</title>
+
+    <script>
+$.jgrid.defaults.styleUI = 'Bootstrap4';
+$.jgrid.defaults.iconSet = 'Octicons';
+
+//$.jgrid.defaults.iconSet = "Iconic";
+//$.jgrid.defaults.iconSet = "fontAwesome";
+</script>
+
 </head>
 <body>
       <!-- navbar -->
@@ -27,43 +62,49 @@
               <ul class="navbar-nav flex-column mt-4">
                   {% if 'Student Details' in title %}
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user text-light fa-lg mr-3"></i>Students</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Courses</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignments</a></li>
+                <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
-                {% elif 'Student Details' in title %}
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user text-light fa-lg mr-3"></i>Students</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Courses</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignments</a></li>
+                {% elif 'Instructor Details' in title %}
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Students</a></li>
+                <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
-                {% elif 'Student Details' in title %}
+                {% elif 'Course Details' in title %}
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2  sidebar-link current"><i class="fas fa-user text-light fa-lg mr-3"></i>Students</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Courses</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignments</a></li>
+                <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignment</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Grades</a></li>
+                <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
+                <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
+                {% elif 'Assignment Details' in title %}
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user text-light fa-lg mr-3"></i>Students</a></li>
+                <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
                 {% elif 'Student Details' in title %}
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user text-light fa-lg mr-3"></i>Students</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Courses</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignments</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Grades</a></li>
-                <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
-                <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
-                {% elif 'Student Details' in title %}
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user text-light fa-lg mr-3"></i>Students</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Courses</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignments</a></li>
+                <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
                 {% elif 'Documentation Details' in title %}
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Students</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Courses</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignments</a></li>
+                <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
@@ -107,7 +148,7 @@
                         {% if current_user.is_authenticated %}
                             <i class="text-info fas fa-user-circle fa-lg text-info mr-2"></i><span class="text-info">{{ current_user.username.capitalize() }}<a href="#" class="nav-link text-danger" data-toggle="modal" data-target="#sign-out"><i class="fas fa-sign-out-alt text-danger fa-lg"></i> Signout</a></span>
                         {% else %}
-                            <i class="text-info fas fa-user-circle fa-lg text-info mr-2"></i><span class="text-info">anonymous</span>  <a href="#" class="nav-link" data-toggle="modal" data-target="#sign-out"><i class="fas fa-sign-out-alt text-danger fa-lg"></i></a>
+                            <i class="text-info fas fa-user-circle fa-lg text-info mr-2"></i><span class="text-info">anonymous</span>  <a href="#" class="nav-link text-danger" data-toggle="modal" data-target="#sign-out"><i class="fas fa-sign-out-alt text-danger fa-lg"></i> Sign in</a></span>
                         {% endif %}
 
                     </li>
@@ -133,7 +174,12 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            Press signout to leave
+                    {% if current_user.is_authenticated %}
+                        Press signout to leave
+                    {% else %}
+                        Press signin to leave
+                    {% endif %}
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success" data-dismiss="modal">Stay Here</button>
@@ -152,22 +198,26 @@
     </div>
     <!-- end of modal -->
 
-    {% block content %}{% endblock %}
+{% block content %}{% endblock %}
+
+
 
 
 <footer class="footer">
       <div class="container text-center">
-         <span class="text-muted credit">&copy; 2019 Copyright. Made by Bhuppal & Cindy</span>
+        <span class="text-muted credit">&copy; 2019 Copyright. Made by Bhuppal & Cindy</span>
+        {% if current_user.is_authenticated %}
+            <span>Logged In</span>
+        {% else %}
+            <span>Logged Out</span>
+        {% endif %}
       </div>
     </footer>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+
     <script src="static/js/script.js"></script>
-
-
 
 </body>
 </html>
