@@ -1,20 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-{% block javascript %}
-<script>
-$(document).ready(function(){
-  $("button").click(function(){
-    $("#div1").load("http://schoolgradebook.pythonanywhere.com/api/instructor", function(responseTxt, statusTxt, xhr){
-      if(statusTxt == "success")
-        alert("External content loaded successfully!");
-      if(statusTxt == "error")
-        alert("Error: " + xhr.status + ": " + xhr.statusText);
-    });
-  });
-});
-</script>
-{% endblock %}
+
 
    <!-- cards -->
 
@@ -25,16 +12,17 @@ $(document).ready(function(){
             <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
                 <br/>
 <h1>Instructor Details</h1>
-  <div id="div1"><h2>Let jQuery AJAX Change This Text</h2></div>
-
-<button>Get External Content</button>
+<div id="InstructorDetails">
+</div>
 
         </div>
       </div>
 
     </section>
 
-
+<script>
+loadAllInstructorDetails();
+</script>
 
     <!-- end of cards -->
 {% endblock %}
