@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import login_user, LoginManager, UserMixin, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash
-from instructor import Instructor
 import json
 
 app = Flask(__name__)
@@ -25,6 +24,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
 
 app.secret_key = "SchoolGradeBook"
 login_manager = LoginManager()
@@ -101,8 +101,8 @@ class Course(db.Model):
     course_schedule = db.Column(db.String(200))
     course_startdate = db.Column(db.Date)
     course_enddate = db.Column(db.Date)
-    course_id = db.Column(db.Integer, db.ForeignKey('sgb_Instructor.id'), nullable=True)
-    Course_key = db.relationship('sgb_Instructor', foreign_keys=course_id)
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -122,7 +122,7 @@ def login():
         return render_template("login_page.html", error=True)
 
     login_user(user)
-    return redirect(url_for('index'))
+    return redirect(url_for('documentation'))
 
 
 
@@ -167,8 +167,8 @@ def documentation():
     return redirect(url_for('documentation'))
 
 
-@app.route('/api/instructors', methods=['GET'])
-def get_instructor():
+@app.route('/api/instructor', methods=['GET'])
+def get_all_instructor():
     return jsonify({'instructor': Instructor.get_all_instructors()})
 
 
