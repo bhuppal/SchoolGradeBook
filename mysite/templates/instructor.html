@@ -2,18 +2,31 @@
 
 {% block content %}
 
-
-   <!-- cards -->
-
-   <!-- cards -->
     <section>
       <div class="container-fluid">
         <div class="row">
             <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
                 <br/>
-<h1>Instructor Details</h1>
-<div id="InstructorDetails">
-</div>
+                <div id="InstructorDetails"></div>
+
+<table id="table" class="table table-hover" id="instructor_table">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Position</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Notes</th>
+    </tr>
+  </thead>
+
+<tbody id="tbody">
+     </tbody>
+
+</table>
+
 
         </div>
       </div>
@@ -21,7 +34,30 @@
     </section>
 
 <script>
-loadAllInstructorDetails();
+
+$(document).ready(function () {
+$.getJSON('http://schoolgradebook.pythonanywhere.com/api/instructor', function (arr) {
+        console.log(arr);
+        var instructor_data = '';
+        var i;
+        for(i = 0; i < arr.instructor.length; i++) {
+            instructor_data += '<tr>';
+            instructor_data += '<td>' +arr.instructor[i].title+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].first_name+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].last_name+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].position+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].email+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].phone+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].notes+'</td>';
+            instructor_data += '</tr>';
+        }
+
+        $('#tbody').append(instructor_data);
+
+    });
+});
+
+
 </script>
 
     <!-- end of cards -->
