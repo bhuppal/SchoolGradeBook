@@ -110,7 +110,7 @@ class Course(db.Model):
     course_startdate = db.Column(db.DateTime)
     course_enddate = db.Column(db.DateTime)
     instructor_id = db.Column(db.Integer, db.ForeignKey('sgb_Instructor.id'))
-
+    assignments = db.relationship('Assignment', backref='course_assignment')
 
     def json(self):
         return {
@@ -140,7 +140,39 @@ class Course(db.Model):
         return json.dumps(Course_object)
 
 
+class Assignment(db.Model):
+    __tablename__ = "sgb_Assignment"
 
+    id = db.Column(db.Integer, primary_key=True)
+    assignment_name = db.Column(db.String(150))
+    assignment_startdate = db.Column(db.DateTime)
+    assignment_duedate = db.Column(db.DateTime)
+    assignment_grade = db.Column(db.Integer)
+    courses = db.Column(db.Integer, db.ForeignKey('sgb_Course.id'))
+
+
+    def json(self):
+        return {
+                'id': self.id,
+                'assignment_name': self.assignment_name,
+                'assignment_startdate': dump_datetime(self.assignment_startdate),
+                'assignment_duedate': dump_datetime(self.assignment_duedate),
+                'assignment_grade': self.assignment_grade
+        }
+
+
+    def get_all_assignments():
+        return [Course.json(assignment) for assignment in Assignment.query.all()]
+
+    def __repr__(self):
+        Assignment_object = {
+                 'id': self.id,
+                'assignment_name': self.assignment_name,
+                'assignment_startdate': dump_datetime(self.assignment_startdate),
+                'assignment_duedate': dump_datetime(self.assignment_duedate),
+                'assignment_grade': self.assignment_grade
+        }
+        return json.dumps(Assignment_object)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -205,6 +237,19 @@ def course():
     return redirect(url_for('course'))
 
 
+@app.route('/assignment', methods=["GET","POST"])
+def assignment():
+    if request.method == "GET":
+        course_id = request.args.get('Courseid')
+        coursedata = Course.query.filter_by(course_id = course_id).first()
+        data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.course_id == course_id).order_by(Course.id).all()
+        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata)
+
+    if not current_user.is_authenticated:
+        return render_template("login_page.html", error=True)
+
+    return redirect(url_for('assignment'))
+
 
 @app.route('/documentation', methods=["GET","POST"])
 def documentation():
@@ -226,6 +271,22 @@ def get_all_instructor():
 @app.route('/api/course', methods=['GET'])
 def get_all_course():
     recordcount =  Course.query.count();
-    return jsonify({'course': db.session.query(Course.course_id, Course.course_name, Course.course_description, Course.course_schedule, Course.course_startdate, Course.course_enddate, Instructor.id, Instructor.first_name, Instructor.last_name, Instructor.title).outerjoin(Instructor,Course.instructor_id == Instructor.id).order_by(Course.course_id).all(), 'record':recordcount})
+    return jsonify({'course': db.session.query(Course.course_id, Course.course_name, Course.course_description, Course.course_schedule, Course.course_startdate, Course.course_enddate, Instructor.id, Instructor.first_name, Instructor.last_name, Instructor.title).join(Instructor,Course.instructor_id == Instructor.id).order_by(Course.course_id).all(), 'record':recordcount})
+
+
+@app.route('/api/assignment', methods=['GET'])
+def get_all_assignment():
+    recordcount =  Assignment.query.count();
+    return jsonify({'assignment': db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).order_by(Course.id).all(), 'record':recordcount})
+
+
+@app.route('/api/assignment/<int:course_id>', methods=['GET'])
+def get_all_assignment_id(course_id):
+    recordcount =  Assignment.query.count();
+    return jsonify({'assignment': db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.id == course_id).order_by(Course.id).all(), 'record':recordcount})
+
+
+
+
 
 

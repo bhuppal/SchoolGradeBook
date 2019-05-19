@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <section>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
+                <br/>
+                <div id="AssignmentDetails">
+<a class="btn btn-info" href='http://schoolgradebook.pythonanywhere.com/course'>{{ course_name['course_name'] }}</a></td>
+<table id="table" class="table table-hover" id="instructor_table">
+  <thead>
+    <tr>
+      <th scope="col">Assignment Name</th>
+      <th scope="col">Grade (in %)</th>
+      <th scope="col">Start Date</th>
+      <th scope="col">Due Date</th>
+    </tr>
+  </thead>
+
+<tbody id="tbody">
+      {% for rows in AssignmentDetails %}
+    <tr>
+
+        <td>{{ rows[3] }}</td>
+        <td>{{ rows[4] }}</td>
+        <td>{{ rows[5].strftime("%A, %d %B %Y") }}</td>
+        <td>{{ rows[6].strftime("%A, %d %B %Y") }}</td>
+    </tr>
+  {% endfor %}
+</tbody>
+
+
+</table>
+<button type="button" class="btn btn-info btn-sm">
+  Record count:  <span id="recordcount" class="badge badge-pill badge-dark">4</span>
+</button>
+                </div>
+
+
+
+
+        </div>
+      </div>
+
+    </section>
+
+<script>
+
+</script>
+
+    <!-- end of cards -->
+{% endblock %}
