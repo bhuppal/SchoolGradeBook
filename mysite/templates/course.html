@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <section>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
+                <br/>
+                <div id="InstructorDetails"></div>
+
+<table id="table" class="table table-hover" id="instructor_table">
+  <thead>
+    <tr>
+      <th scope="col">Course Title</th>
+      <th scope="col">Description</th>
+      <th scope="col">Instructor</th>
+      <th scope="col">Schedule</th>
+      <th scope="col">Start Date</th>
+      <th scope="col">End Date</th>
+    </tr>
+  </thead>
+
+<tbody id="tbody">
+     </tbody>
+
+</table>
+<button type="button" class="btn btn-info">
+  Record count:  <span id="recordcount" class="badge badge-pill badge-dark"></span>
+</button>
+
+        </div>
+      </div>
+
+    </section>
+
+<script>
+
+$(document).ready(function () {
+$.getJSON('http://schoolgradebook.pythonanywhere.com/api/course', function (arr) {
+        console.log(arr);
+        var course_data = '';
+        var i;
+        for(i = 0; i < arr.course.length; i++) {
+            course_data += '<tr>';
+            course_data += '<td><a href='+ 'http://schoolgradebook.pythonanywhere.com/course' +'>' +arr.course[i][1]+'</a></td>';
+            course_data += '<td>' +arr.course[i][2]+'</td>';
+            course_data += '<td><a href='+ 'http://schoolgradebook.pythonanywhere.com/instructor' +'>'  +arr.course[i][9]+' '+arr.course[i][7]+' ' +arr.course[i][8]+'</td>';
+            course_data += '<td>' +arr.course[i][3]+'</td>';
+            course_data += '<td>' +arr.course[i][4]+'</td>';
+            course_data += '<td>' +arr.course[i][5]+'</td>';
+            course_data += '</tr>';
+        }
+
+        $('#tbody').append(course_data);
+        $('#recordcount').append(arr.record);
+    });
+});
+
+
+</script>
+
+    <!-- end of cards -->
+{% endblock %}

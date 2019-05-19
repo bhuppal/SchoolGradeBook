@@ -36,53 +36,53 @@
             <div class="col-xl-2 col-lg-3 col-md-4 sidebar fixed-top">
               <a href="#" class="navbar-brand text-white d-block mx-auto text-center py-3 mb-4 bottom-border">School Grade Book</a>
               <ul class="navbar-nav flex-column mt-4">
-                  {% if 'Student Details' in title %}
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user-graduate text-light fa-lg mr-3"></i>Students</a></li>
+                {% if 'Student Details' in title %}
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user-graduate text-warning fa-lg mr-3"></i>Students</a></li>
                 <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('course') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-clipboard text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-table text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
                 {% elif 'Instructor Details' in title %}
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user-graduate  text-light fa-lg mr-3"></i>Students</a></li>
-                <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user text-warning fa-lg mr-3"></i>Instructor</a></li>
+                <li class="nav-item"><a href="{{ url_for('course') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-clipboard text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-table text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
                 {% elif 'Course Details' in title %}
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2  sidebar-link current"><i class="fas fa-user-graduate  text-light fa-lg mr-3"></i>Students</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2  sidebar-link"><i class="fas fa-user-graduate  text-light fa-lg mr-3"></i>Students</a></li>
                 <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('course') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-book text-warning fa-lg mr-3"></i>Course</a></li>
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-clipboard text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-table text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
                 {% elif 'Assignment Details' in title %}
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user-graduate  text-light fa-lg mr-3"></i>Students</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user-graduate  text-light fa-lg mr-3"></i>Students</a></li>
                 <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-clipboard text-light fa-lg mr-3"></i>Assignment</a></li>
+                <li class="nav-item"><a href="{{ url_for('course') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link cuurent"><i class="fas fa-clipboard text-warning fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-table text-light fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
                 {% elif 'Student Details' in title %}
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-user-graduate  text-light fa-lg mr-3"></i>Students</a></li>
                 <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('course') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-clipboard text-light fa-lg mr-3"></i>Assignment</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-table text-light fa-lg mr-3"></i>Grades</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-table text-warning fa-lg mr-3"></i>Grades</a></li>
                 <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
                 {% elif 'Documentation Details' in title %}
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user-graduate  text-light fa-lg mr-3"></i>Students</a></li>
                 <li class="nav-item"><a href="{{ url_for('instructor') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-user text-light fa-lg mr-3"></i>Instructor</a></li>
-                <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
+                <li class="nav-item"><a href="{{ url_for('course') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-book text-light fa-lg mr-3"></i>Course</a></li>
                 <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-clipboard text-light fa-lg mr-3"></i>Assignment</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-table text-light fa-lg mr-3"></i>Grades</a></li>
-                <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-file-alt text-light fa-lg mr-3"></i>Documentation</a></li>
+                <li class="nav-item"><a href="{{ url_for('documentation') }}" class="nav-link text-white p-2 mb-2 sidebar-link current"><i class="fas fa-file-alt text-warning fa-lg mr-3"></i>Documentation</a></li>
                 <li class="nav-item bottom-border"><a href="#" class="nav-link text-white p-2 mb-2 sidebar-link"><i class="fas fa-wrench text-light fa-lg mr-3"></i>Settings</a></li>
                 {% endif %}
               </ul>

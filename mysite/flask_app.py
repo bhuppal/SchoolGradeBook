@@ -5,7 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import login_user, LoginManager, UserMixin, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash
+from flask_session import Session
 import json
+
 
 app = Flask(__name__)
 
@@ -30,20 +32,25 @@ app.secret_key = "SchoolGradeBook"
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+def dump_datetime(value):
+    """Deserialize datetime object into string form for JSON processing."""
+    if value is None:
+        return None
+    return [value.strftime("%Y-%m-%d")]
+
 class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
+    instructor = db.relationship('Instructor', backref='User', uselist=False)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
     def get_id(self):
         return self.username
-
-
 
 class Instructor(db.Model):
     __tablename__ = "sgb_Instructor"
@@ -56,8 +63,9 @@ class Instructor(db.Model):
     email = db.Column(db.String(100))
     phone = db.Column(db.String(100))
     notes = db.Column(db.String(500))
-    instructor_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    Instructor_key = db.relationship('User', foreign_keys=instructor_id)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique = True)
+    courses = db.relationship('Course', backref='course_instructor')
+
 
     def json(self):
         return {
@@ -69,7 +77,7 @@ class Instructor(db.Model):
                 'email': self.email,
                 'phone': self.phone,
                 'notes': self.notes,
-                'instructor_id': self.instructor_id
+                'user_id': self.user_id
         }
 
 
@@ -86,7 +94,7 @@ class Instructor(db.Model):
                 'email': self.email,
                 'phone': self.phone,
                 'notes': self.notes,
-                'instructor_id': self.instructor_id
+                'user_id': self.user_id
         }
         return json.dumps(instructor_object)
 
@@ -99,8 +107,38 @@ class Course(db.Model):
     course_name = db.Column(db.String(150))
     course_description = db.Column(db.String(4000))
     course_schedule = db.Column(db.String(200))
-    course_startdate = db.Column(db.Date)
-    course_enddate = db.Column(db.Date)
+    course_startdate = db.Column(db.DateTime)
+    course_enddate = db.Column(db.DateTime)
+    instructor_id = db.Column(db.Integer, db.ForeignKey('sgb_Instructor.id'))
+
+
+    def json(self):
+        return {
+                'id': self.id,
+                'course_id': self.course_id,
+                'course_name': self.course_name,
+                'course_description': self.course_description,
+                'course_schedule': self.course_schedule,
+                'course_startdate': dump_datetime(self.course_startdate),
+                'course_enddate': dump_datetime(self.course_enddate)
+        }
+
+
+    def get_all_courses():
+        return [Course.json(course) for course in Course.query.all()]
+
+    def __repr__(self):
+        Course_object = {
+                 'id': self.id,
+                'course_id': self.course_id,
+                'course_name': self.course_name,
+                'course_description': self.course_description,
+                'course_schedule': self.course_schedule,
+                'course_startdate': dump_datetime(self.course_startdate),
+                'course_enddate': dump_datetime(self.course_enddate)
+        }
+        return json.dumps(Course_object)
+
 
 
 
@@ -156,6 +194,18 @@ def instructor():
     return redirect(url_for('instructor'))
 
 
+@app.route('/course', methods=["GET","POST"])
+def course():
+    if request.method == "GET":
+        return render_template("course.html", timestamp=datetime.now(), title = 'Course Details')
+
+    if not current_user.is_authenticated:
+        return render_template("login_page.html", error=True)
+
+    return redirect(url_for('course'))
+
+
+
 @app.route('/documentation', methods=["GET","POST"])
 def documentation():
     if request.method == "GET":
@@ -169,9 +219,13 @@ def documentation():
 
 @app.route('/api/instructor', methods=['GET'])
 def get_all_instructor():
-    return jsonify({'instructor': Instructor.get_all_instructors()})
+    recordcount =  Instructor.query.count();
+    return jsonify({'instructor': Instructor.get_all_instructors(), 'record':recordcount})
 
 
-
+@app.route('/api/course', methods=['GET'])
+def get_all_course():
+    recordcount =  Course.query.count();
+    return jsonify({'course': db.session.query(Course.course_id, Course.course_name, Course.course_description, Course.course_schedule, Course.course_startdate, Course.course_enddate, Instructor.id, Instructor.first_name, Instructor.last_name, Instructor.title).outerjoin(Instructor,Course.instructor_id == Instructor.id).order_by(Course.course_id).all(), 'record':recordcount})
 
 

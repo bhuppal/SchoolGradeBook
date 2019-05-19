@@ -9,6 +9,8 @@
                 <br/>
                 <div id="InstructorDetails"></div>
 
+
+
 <table id="table" class="table table-hover" id="instructor_table">
   <thead>
     <tr>
@@ -26,7 +28,9 @@
      </tbody>
 
 </table>
-
+<button type="button" class="btn btn-info">
+  Record count:  <span id="recordcount" class="badge badge-pill badge-dark"></span>
+</button>
 
         </div>
       </div>
@@ -53,6 +57,7 @@ $.getJSON('http://schoolgradebook.pythonanywhere.com/api/instructor', function (
         }
 
         $('#tbody').append(instructor_data);
+        $('#recordcount').append(arr.record);
 
     });
 });
