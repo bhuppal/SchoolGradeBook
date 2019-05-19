@@ -174,6 +174,42 @@ class Assignment(db.Model):
         }
         return json.dumps(Assignment_object)
 
+class Student(db.Model):
+    __tablename__ = "sgb_Student"
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.String(150))
+    first_name = db.Column(db.String(150))
+    last_name = db.Column(db.String(150))
+    major = db.Column(db.String(150))
+    email  = db.Column(db.String(50))
+
+    def json(self):
+        return {
+                'id': self.id,
+                'student_id': self.student_id,
+                'first_name': self.first_name,
+                'last_name': self.last_name,
+                'major': self.major,
+                'email': self.email
+        }
+
+
+    def get_all_students():
+        return [Student.json(student) for student in Student.query.all()]
+
+    def __repr__(self):
+        student_object = {
+                'id': self.id,
+                'student_id': self.student_id,
+                'first_name': self.first_name,
+                'last_name': self.last_name,
+                'major': self.major,
+                'email': self.email
+        }
+        return json.dumps(student_object)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(username=user_id).first()
@@ -192,7 +228,7 @@ def login():
         return render_template("login_page.html", error=True)
 
     login_user(user)
-    return redirect(url_for('documentation'))
+    return redirect(url_for('index'))
 
 
 
@@ -207,7 +243,7 @@ def logout():
 @app.route('/', methods=["GET","POST"])
 def index():
     if request.method == "GET":
-        return render_template("main_page.html", timestamp=datetime.now(),title = 'Student Details')
+        return render_template("student.html", timestamp=datetime.now(),title = 'Student Details', student = Student.query.all(), recordcount = Student.query.count())
 
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
@@ -287,6 +323,11 @@ def get_all_assignment_id(course_id):
 
 
 
-
+@app.route('/api/student/<int:studentid>', methods=['POST'])
+def delete_student(studentid):
+    delstudentrecord =  Student.query.filter_by(id=studentid).first()
+    db.session.delete(delstudentrecord)
+    db.session.commit()
+    return redirect(url_for('index'))
 
 
