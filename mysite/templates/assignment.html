@@ -16,6 +16,7 @@
       <th scope="col">Grade (in %)</th>
       <th scope="col">Start Date</th>
       <th scope="col">Due Date</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
 
@@ -27,14 +28,35 @@
         <td>{{ rows[4] }}</td>
         <td>{{ rows[5].strftime("%A, %d %B %Y") }}</td>
         <td>{{ rows[6].strftime("%A, %d %B %Y") }}</td>
+        <td><form action='http://schoolgradebook.pythonanywhere.com/api/delassignment/{{ rows['id'] }}' method='POST'><button type="submit" class="btn btn-danger btn-sm" role="button">Delete</button></form></td>
     </tr>
   {% endfor %}
 </tbody>
 </table>
-
-<button type="button" class="btn btn-info btn-sm">
-  Record count:  <span id="recordcount" class="badge badge-pill badge-dark">4</span>
-</button>
+<button type="button" class="btn btn-info btn-sm mr-5">
+ Record count:  <span id="recordcount" class="badge badge-pill badge-dark">{{ recordcount }}</span>
+ </button>
+<div class="col-xl-5 mt-2 hidden">
+                <div class="card rounded">
+                  <div class="card-body">
+                      <h5 class="text-muted text-center mb-4">Add a new Assignment</h5>
+                      <form action='http://schoolgradebook.pythonanywhere.com/assignment?Courseid={{ course_name['id'] }}' method='post'>
+                      <div class="form-group">
+                        <label for="AssignmentName" class="text-muted">Name</label>
+                        <input type="text" id="AssignmentName" name="AssignmentName" class="form-control py-2 mb-3" placeholder="Assignment name">
+                        <label for="assignment_startdate" class="text-muted">Start Date</label>
+                        <input type="text" id="assignment_startdate" name="assignment_startdate" class="form-control py-2 mb-3" placeholder="Enter start date foramt 2019/10/05">
+                        <label for="assignment_enddate" class="text-muted">Last Name</label>
+                        <input type="text" id="assignment_enddate" name="assignment_enddate" class="form-control py-2 mb-3" placeholder="Enter end date format 2019/10/05">
+                        <label for="AssignmentGrade" class="text-muted">Major</label>
+                        <input type="text" id="AssignmentGrade" name="AssignmentGrade" class="form-control py-2 mb-3" placeholder="Enter grade">
+                        <input type="hidden" id="Courseid" name="Courseid" class="form-control py-2 mb-3" value={{ course_name['id'] }}>
+                        <button type="submit" class="btn btn-block text-uppercase font-weight-bold text-light bg-success py-2">Create Assignment</button>
+                      </div>
+                    </form>
+        </div>
+      </div>
+</div>
                 </div>
 
 

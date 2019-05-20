@@ -111,6 +111,7 @@ class Course(db.Model):
     course_enddate = db.Column(db.DateTime)
     instructor_id = db.Column(db.Integer, db.ForeignKey('sgb_Instructor.id'))
     assignments = db.relationship('Assignment', backref='course_assignment')
+    studcourse = db.relationship('StudentAssignment', backref='student_course')
 
     def json(self):
         return {
@@ -183,6 +184,7 @@ class Student(db.Model):
     last_name = db.Column(db.String(150))
     major = db.Column(db.String(150))
     email  = db.Column(db.String(50))
+    studassignments = db.relationship('StudentAssignment', backref='student_assignment')
 
     def json(self):
         return {
@@ -208,6 +210,41 @@ class Student(db.Model):
                 'email': self.email
         }
         return json.dumps(student_object)
+
+
+class StudentAssignment(db.Model):
+    __tablename__ = "sgb_StudentAssignment"
+
+    id = db.Column(db.Integer, primary_key=True)
+    AssignmentName = db.Column(db.String(150))
+    GradeTaken = db.Column(db.Integer)
+    GradeMax = db.Column(db.Integer)
+    student = db.Column(db.Integer, db.ForeignKey('sgb_Student.id'))
+    course = db.Column(db.Integer, db.ForeignKey('sgb_Course.id'))
+
+
+    def json(self):
+        return {
+                'id': self.id,
+                'AssignmentName': self.AssignmentName,
+                'first_name': self.first_name,
+                'GradeTaken': self.GradeTaken,
+                'GradeMax': self.GradeMax
+        }
+
+
+    def get_all_studentassignment():
+        return [StudentAssignment.json(studentassignment) for studentassignment in StudentAssignment.query.all()]
+
+    def __repr__(self):
+        studentassignment_object = {
+                'id': self.id,
+                'AssignmentName': self.AssignmentName,
+                'first_name': self.first_name,
+                'GradeTaken': self.GradeTaken,
+                'GradeMax': self.GradeMax
+        }
+        return json.dumps(studentassignment_object)
 
 
 @login_manager.user_loader
@@ -300,10 +337,19 @@ def assignment():
         data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.course_id == course_id).order_by(Course.id).all()
         return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata)
 
+    if request.method == "POST":
+        course_id = request.form('Courseid')
+        coursedata = Course.query.filter_by(course_id = course_id).first()
+        data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.course_id == course_id).order_by(Course.id).all()
+        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata)
+    else:
+        return redirect(url_for('assignment'))
+
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
 
     return redirect(url_for('assignment'))
+
 
 
 @app.route('/documentation', methods=["GET","POST"])
@@ -339,6 +385,14 @@ def get_all_assignment():
 def get_all_assignment_id(course_id):
     recordcount =  Assignment.query.count();
     return jsonify({'assignment': db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.id == course_id).order_by(Course.id).all(), 'record':recordcount})
+
+
+@app.route('/api/delassignment/<int:assignmentid>', methods=['GET','POST'])
+def delete_assignment(assignmentid):
+    delassignmentrecord =  Assignment.query.filter_by(id=assignmentid).first()
+    db.session.delete(delassignmentrecord)
+    db.session.commit()
+    return redirect(url_for('course'))
 
 
 
