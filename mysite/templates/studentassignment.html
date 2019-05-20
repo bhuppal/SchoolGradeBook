@@ -10,7 +10,30 @@
                 <div id="StudentAssignmentDetails">
                     <div id="StudentAddDetails">
 <a class="btn btn-info" href='http://schoolgradebook.pythonanywhere.com'><< All student details</a>
+<span class="text-success"> {{ message }}</span>
 <div>
+<div>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-6 col-lg-7 col-md-12">
+            <div class="card">
+                <div class="body">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-12">
+                            <i class="fas fa-user-graduate fa-5x ml-2 mt-4 text-warning"></i>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-12 mt-4">
+                            <h4 class="m-t-0 m-b-0"><strong>{{ studentrecord["first_name"] }} {{ studentrecord["last_name"] }}</strong></h4>
+                            <span>ID:{{ studentrecord["student_id"] }} email: {{ studentrecord["email"] }}</span>
+                            <p>Major in {{studentrecord["major"] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+	</div>
+</div>
 <table id="table" class="table table-hover" id="instructor_table">
   <thead>
     <tr>
@@ -27,7 +50,7 @@
     <tr>
 
         <td>{{ rows[0]["AssignmentName"] }}</td>
-        <td><form action='http://schoolgradebook.pythonanywhere.com/api/studentassignment' method='POST'><div class="form-group"><input type="text" class="form-control d-inline-block" style="width:50px;" id="gradetaken" name="gradetaken" value={{ rows[0]["GradeTaken"] }}><button type="submit" class="btn btn-success btn-sm" role="button"> Save</button></div></form></td>
+        <td><form action='http://schoolgradebook.pythonanywhere.com/studentassignment' method='POST'><input type="hidden" id="studentassignmentid" name="studentassignmentid" value={{ rows[0]["id"] }}><input type="hidden" id="studentid" name="studentid" value={{ studentid }}><div class="form-group"><input type="text" class="form-control d-inline-block" style="width:50px;" id="gradetaken" name="gradetaken" value={{ rows[0]["GradeTaken"] }}><button type="submit" class="btn btn-success btn-sm" role="button"> Save</button> </div></form></td>
         <td>{{ rows[0]["GradeMax"] }}</td>
         <td>{{ rows[2]["title"] }}{{ rows[2]["first_name"] }} {{ rows[2]["last_name"] }}</td>
         <td>{{ rows[1]["course_name"] }}</td>
@@ -36,11 +59,11 @@
   {% endfor %}
 </tbody>
 </table>
-
-{{ studentid }}
                 </div>
 
-
+<button type="button" class="btn btn-info btn-sm mr-5">
+  Record count:  <span id="recordcount" class="badge badge-pill badge-dark">{{ recordcount }}</span>
+</button>
 
 
 

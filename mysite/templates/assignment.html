@@ -23,12 +23,11 @@
 <tbody id="tbody">
       {% for rows in AssignmentDetails %}
     <tr>
-
         <td>{{ rows[3] }}</td>
         <td>{{ rows[4] }}</td>
         <td>{{ rows[5].strftime("%A, %d %B %Y") }}</td>
         <td>{{ rows[6].strftime("%A, %d %B %Y") }}</td>
-        <td><form action='http://schoolgradebook.pythonanywhere.com/api/delassignment/{{ rows['id'] }}' method='POST'><button type="submit" class="btn btn-danger btn-sm" role="button">Delete</button></form></td>
+        <td><form action='http://schoolgradebook.pythonanywhere.com/delassignment' method='GET'><input type="hidden" id="assignmentid" name="assignmentid" value={{ rows[2] }}><input type="hidden" id="courseid" name="courseid" value={{ course_id }}><button type="submit" class="btn btn-danger btn-sm" role="button">Delete</button></form></td>
     </tr>
   {% endfor %}
 </tbody>

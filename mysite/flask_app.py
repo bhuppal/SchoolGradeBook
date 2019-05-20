@@ -309,15 +309,52 @@ def studentadd():
 def studentassignment():
     if request.method == "GET":
         studentid = request.args.get('studentid')
+        recordcount = StudentAssignment.query.filter_by(student = studentid).count()
+        studentrecord = Student.query.filter_by(id = studentid).first()
+        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentrecord = studentrecord, studentid = studentid, recordcount = recordcount)
 
-        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentid = studentid)
+    if request.method == "POST":
+        studentassignmentid = request.form['studentassignmentid']
+        gradetaken = request.form['gradetaken']
+        studentid = request.form['studentid']
+        recordcount = StudentAssignment.query.filter_by(student = studentid).count()
+        studentassignmentrecord = StudentAssignment.query.filter_by(id = studentassignmentid).first()
+        studentassignmentrecord.GradeTaken = gradetaken
+        db.session.commit()
+        studentrecord = Student.query.filter_by(id = studentid).first()
+        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentrecord = studentrecord, studentid = studentid, recordcount = recordcount, studentassignmentid = studentassignmentid, gradetaken = gradetaken, message = 'Updated successfully.')
 
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
 
+    return redirect(url_for('index'))
+
+@app.route("/studentassignmentupdate", methods=["GET", "POST"])
+def studentassignmentupdate():
+    if request.method == "GET":
+        studentassignmentid = request.args.get('studentassignmentid')
+        gradetaken = request.args.get('gradetaken')
+        studentid = request.args.get('studentid')
+        recordcount = StudentAssignment.query.filter_by(student = studentid).count()
+        studentassignmentrecord = StudentAssignment.query.filter_by(id = studentassignmentid).first()
+        studentassignmentrecord.GradeTaken = gradetaken
+        db.session.commit()
+        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentid = studentid, recordcount = recordcount, studentassignmentid = studentassignmentid, gradetaken = gradetaken)
+
+    if not current_user.is_authenticated:
+        return render_template("login_page.html", error=True)
 
     return redirect(url_for('index'))
 
+@app.route('/grade', methods=["GET","POST"])
+def grade():
+    if request.method == "GET":
+        return render_template("grade.html", title = 'Grade Details')
+
+    if not current_user.is_authenticated:
+        return render_template("login_page.html", error=True)
+
+    return redirect(url_for('grade'))
 
 @app.route('/instructor', methods=["GET","POST"])
 def instructor():
@@ -341,19 +378,23 @@ def course():
     return redirect(url_for('course'))
 
 
+
+
 @app.route('/assignment', methods=["GET","POST"])
 def assignment():
     if request.method == "GET":
         course_id = request.args.get('Courseid')
         coursedata = Course.query.filter_by(course_id = course_id).first()
         data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.course_id == course_id).order_by(Course.id).all()
-        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata)
+        recordcount =  Assignment.query.filter_by(courses = coursedata.id).count()
+        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata, recordcount = recordcount)
 
     if request.method == "POST":
         course_id = request.form('Courseid')
         coursedata = Course.query.filter_by(course_id = course_id).first()
+        recordcount = Assignment.query.filter_by(courses = coursedata.id).count()
         data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.course_id == course_id).order_by(Course.id).all()
-        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata)
+        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata, recordcount = recordcount)
     else:
         return redirect(url_for('assignment'))
 
@@ -362,6 +403,19 @@ def assignment():
 
     return redirect(url_for('assignment'))
 
+
+@app.route('/delassignment', methods=['GET','POST'])
+def delete_assignment():
+    if request.method == "GET":
+        assignmentid = request.args.get('assignmentid')
+        delassignmentrecord =  Assignment.query.filter_by(id=assignmentid).first()
+        db.session.delete(delassignmentrecord)
+        db.session.commit()
+        course_id = request.args.get('courseid')
+        coursedata = Course.query.filter_by(course_id = course_id).first()
+        recordcount = Assignment.query.filter_by(courses = coursedata.id).count()
+        data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.course_id == course_id).order_by(Course.id).all()
+        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata, recordcount = recordcount)
 
 
 @app.route('/documentation', methods=["GET","POST"])
@@ -399,12 +453,9 @@ def get_all_assignment_id(course_id):
     return jsonify({'assignment': db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.id == course_id).order_by(Course.id).all(), 'record':recordcount})
 
 
-@app.route('/api/delassignment/<int:assignmentid>', methods=['GET','POST'])
-def delete_assignment(assignmentid):
-    delassignmentrecord =  Assignment.query.filter_by(id=assignmentid).first()
-    db.session.delete(delassignmentrecord)
-    db.session.commit()
-    return redirect(url_for('course'))
+@app.route('/api/student/<int:studentid>', methods=['GET'])
+def get_all_studentbyid(studentid):
+    return jsonify({'student': StudentAssignment.query.filter_by(id = studentid).first()})
 
 
 
@@ -414,5 +465,7 @@ def delete_student(studentid):
     db.session.delete(delstudentrecord)
     db.session.commit()
     return redirect(url_for('index'))
+
+
 
 

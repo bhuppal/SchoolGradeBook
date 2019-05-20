@@ -16,7 +16,6 @@
       <th scope="col">Last Name</th>
       <th scope="col">Major</th>
       <th scope="col">Email</th>
-      <th scope="col">Assignment</th>
       <th scope="col">Grade</th>
       <th scope="col">Action</th>
     </tr>
@@ -30,8 +29,7 @@
         <td>{{ rows["last_name"] }}</td>
         <td>{{ rows["major"] }}</td>
         <td>{{ rows["email"] }}</td>
-        <td><form action='http://schoolgradebook.pythonanywhere.com/studentassignment?studentid={{ rows["id"] }}' method='GET'><input type="hidden" id="studentid" name="studentid" value={{ rows["id"] }}><button type="submit" class="btn btn-warning btn-sm" role="button">Assignment</button></form></td>
-        <td><form action='/' method='POST'><button type="submit" class="btn btn-success btn-sm" role="button">Grade</button></form></td>
+        <td><form action='http://schoolgradebook.pythonanywhere.com/studentassignment?studentid={{ rows["id"] }}' method='GET'><input type="hidden" id="studentid" name="studentid" value={{ rows["id"] }}><button type="submit" class="btn btn-warning btn-sm" role="button">Grade</button></form></td>
         <td><form action='http://schoolgradebook.pythonanywhere.com/api/student/{{ rows["id"] }}' method='POST'><button type="submit" class="btn btn-danger btn-sm" role="button">Delete</button></form></td>
     </tr>
   {% endfor %}

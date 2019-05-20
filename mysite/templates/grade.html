@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <section>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
+                <br/>
+                <div id="GradeDetails">
+                    <table id="table" class="table table-hover" id="grade_table">
+  <thead>
+    <tr>
+      <th scope="col">Student ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Course</th>
+      <th scope="col">Instructor</th>
+      <th scope="col">Grade 1</th>
+      <th scope="col">Grade 2</th>
+      <th scope="col">Grade 3</th>
+      <th scope="col">Grade 4</th>
+      <th scope="col">Overall Grade</th>
+    </tr>
+  </thead>
+
+<tbody id="tbody">
+     </tbody>
+
+</table>
+<button type="button" class="btn btn-info">
+  Record count:  <span id="recordcount" class="badge badge-pill badge-dark"></span>
+</button>
+
+
+                </div>
+
+
+
+
+
+        </div>
+      </div>
+
+    </section>
+
+<script>
+
+$(document).ready(function () {
+$.getJSON('http://schoolgradebook.pythonanywhere.com/api/instructor', function (arr) {
+        console.log(arr);
+        var instructor_data = '';
+        var i;
+        for(i = 0; i < arr.instructor.length; i++) {
+            instructor_data += '<tr>';
+            instructor_data += '<td>' +arr.instructor[i].title+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].first_name+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].last_name+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].position+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].email+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].phone+'</td>';
+            instructor_data += '<td>' +arr.instructor[i].notes+'</td>';
+            instructor_data += '</tr>';
+        }
+
+        $('#tbody').append(instructor_data);
+        $('#recordcount').append(arr.record);
+
+    });
+});
+
+
+</script>
+
+    <!-- end of cards -->
+{% endblock %}
