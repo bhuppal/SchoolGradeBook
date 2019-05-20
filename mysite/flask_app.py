@@ -251,6 +251,25 @@ def index():
     return redirect(url_for('index'))
 
 
+@app.route('/studentadd', methods=['GET','POST'])
+def studentadd():
+    if request.method == "GET":
+        return render_template("studentadd.html", title = 'Student Details')
+
+    if request.method == "POST":
+        AddStudent = Student(student_id=request.form["StudentID"], first_name=request.form["StudentFirstName"], last_name=request.form["StudentLastName"], major=request.form["StudentMajor"], email=request.form["StudentEmail"])
+        db.session.add(AddStudent)
+        db.session.commit()
+        return render_template("studentadd.html", timestamp=datetime.now(),title = 'Student Details', success = "Student record successfully added")
+    else:
+        return redirect(url_for('studentadd'))
+
+    if not current_user.is_authenticated:
+        return render_template("login_page.html", error=True)
+
+    return redirect(url_for('index'))
+
+
 @app.route('/instructor', methods=["GET","POST"])
 def instructor():
     if request.method == "GET":

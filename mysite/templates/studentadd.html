@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <section>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
+                <br/>
+                <div id="StudentAddDetails">
+<a class="btn btn-info" href='http://schoolgradebook.pythonanywhere.com'><< All student details</a>
+<div>
+<span class="text-success"> {{ success }}</span>
+</div>
+<div class="col-xl-5 mt-2">
+                <div class="card rounded">
+                  <div class="card-body">
+                      <h5 class="text-muted text-center mb-4">Add a new student</h5>
+                      <form action='http://schoolgradebook.pythonanywhere.com/studentadd' method='post'>
+                      <div class="form-group">
+                        <label for="StudentID" class="text-muted">Student ID</label>
+                        <input type="text" id="StudentID" name="StudentID" class="form-control py-2 mb-3" placeholder="for example: RA87283">
+                        <label for="StudentFirstName" class="text-muted">First Name</label>
+                        <input type="text" id="StudentFirstName" name="StudentFirstName" class="form-control py-2 mb-3" placeholder="Enter First Name">
+                        <label for="StudentLastName" class="text-muted">Last Name</label>
+                        <input type="text" id="StudentLastName" name="StudentLastName" class="form-control py-2 mb-3" placeholder="Enter Last Name">
+                        <label for="StudentMajor" class="text-muted">Major</label>
+                        <input type="text" id="StudentMajor" name="StudentMajor" class="form-control py-2 mb-3" placeholder="Enter Major">
+                        <label for="StudentEmail" class="text-muted">Email address</label>
+                        <input type="email" id="StudentEmail" name="StudentEmail" class="form-control py-2 mb-3" placeholder="Enter Email">
+                        <button type="submit" class="btn btn-block text-uppercase font-weight-bold text-light bg-success py-2">Create Student</button>
+                      </div>
+                    </form>
+        </div>
+      </div>
+</div>
+</div>     </div>
+</div>
+</div>
+    </section>
+
+<script>
+
+$.ajaxSetup({
+  contentType: "application/json; charset=utf-8"
+});
+
+</script>
+
+    <!-- end of cards -->
+{% endblock %}

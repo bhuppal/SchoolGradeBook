@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
                 <br/>
-                <div id="InstructorDetails">
+                <div id="StudentDetails">
 <table id="table" class="table table-hover" id="instructor_table">
   <thead>
     <tr>
@@ -16,6 +16,8 @@
       <th scope="col">Last Name</th>
       <th scope="col">Major</th>
       <th scope="col">Email</th>
+      <th scope="col">Assignment</th>
+      <th scope="col">Grade</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -28,18 +30,22 @@
         <td>{{ rows["last_name"] }}</td>
         <td>{{ rows["major"] }}</td>
         <td>{{ rows["email"] }}</td>
-        <td><form action='http://schoolgradebook.pythonanywhere.com/api/student/{{ rows["id"] }}' method='POST'><button type="submit" class="btn btn-danger" role="button">Delete</button></form></td>
+        <td><form action='/' method='POST'><button type="submit" class="btn btn-warning btn-sm" role="button">Assignment</button></form></td>
+        <td><form action='/' method='POST'><button type="submit" class="btn btn-success btn-sm" role="button">Grade</button></form></td>
+        <td><form action='http://schoolgradebook.pythonanywhere.com/api/student/{{ rows["id"] }}' method='POST'><button type="submit" class="btn btn-danger btn-sm" role="button">Delete</button></form></td>
     </tr>
   {% endfor %}
 </tbody>
 </table>
-<button type="button" class="btn btn-info btn-sm mr-5">
+
+<form action="http://schoolgradebook.pythonanywhere.com/studentadd" method="get">
+    <button type="button" class="btn btn-info btn-sm mr-5">
   Record count:  <span id="recordcount" class="badge badge-pill badge-dark">{{ recordcount }}</span>
 </button>
-
-<button type="button" class="btn btn-success">
+<button type="sumbit" class="btn btn-success">
   Add a new student
 </button>
+</form>
                 </div>
 
 
