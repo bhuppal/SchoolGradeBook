@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <section>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
+                <br/>
+                <div id="StudentAssignmentDetails">
+                    <div id="StudentAddDetails">
+<a class="btn btn-info" href='http://schoolgradebook.pythonanywhere.com'><< All student details</a>
+<div>
+<table id="table" class="table table-hover" id="instructor_table">
+  <thead>
+    <tr>
+        <th scope="col">Assignment</th>
+        <th scope="col">Grade Earned</th>
+        <th scope="col">Grade Max.</th>
+        <th scope="col">Instructor</th>
+        <th scope="col">Course</th>
+    </tr>
+  </thead>
+
+<tbody id="tbody">
+      {% for rows in studentassignment %}
+    <tr>
+
+        <td>{{ rows[0]["AssignmentName"] }}</td>
+        <td><form action='http://schoolgradebook.pythonanywhere.com/api/studentassignment' method='POST'><div class="form-group"><input type="text" class="form-control d-inline-block" style="width:50px;" id="gradetaken" name="gradetaken" value={{ rows[0]["GradeTaken"] }}><button type="submit" class="btn btn-success btn-sm" role="button"> Save</button></div></form></td>
+        <td>{{ rows[0]["GradeMax"] }}</td>
+        <td>{{ rows[2]["title"] }}{{ rows[2]["first_name"] }} {{ rows[2]["last_name"] }}</td>
+        <td>{{ rows[1]["course_name"] }}</td>
+
+    </tr>
+  {% endfor %}
+</tbody>
+</table>
+
+{{ studentid }}
+                </div>
+
+
+
+
+
+        </div>
+      </div>
+
+    </section>
+
+<script>
+
+
+
+</script>
+
+    <!-- end of cards -->
+{% endblock %}

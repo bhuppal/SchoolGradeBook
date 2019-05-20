@@ -227,7 +227,6 @@ class StudentAssignment(db.Model):
         return {
                 'id': self.id,
                 'AssignmentName': self.AssignmentName,
-                'first_name': self.first_name,
                 'GradeTaken': self.GradeTaken,
                 'GradeMax': self.GradeMax
         }
@@ -240,7 +239,6 @@ class StudentAssignment(db.Model):
         studentassignment_object = {
                 'id': self.id,
                 'AssignmentName': self.AssignmentName,
-                'first_name': self.first_name,
                 'GradeTaken': self.GradeTaken,
                 'GradeMax': self.GradeMax
         }
@@ -303,6 +301,20 @@ def studentadd():
 
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
+
+    return redirect(url_for('index'))
+
+
+@app.route("/studentassignment", methods=["GET", "POST"])
+def studentassignment():
+    if request.method == "GET":
+        studentid = request.args.get('studentid')
+
+        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentid = studentid)
+
+    if not current_user.is_authenticated:
+        return render_template("login_page.html", error=True)
+
 
     return redirect(url_for('index'))
 
