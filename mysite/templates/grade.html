@@ -15,44 +15,76 @@
             <h5 class="card-title d-inline-block mr-5">Instructor: {{ rows[1]["title"] }}{{ rows[1]["first_name"] }} {{ rows[1]["last_name"] }}</h5> Start Date: {{ rows[0]["course_startdate"].strftime("%A, %d %B %Y") }}  - End Date: {{ rows[0]["course_enddate"].strftime("%A, %d %B %Y")  }}
             <p class="card-text">
                 <table id="table" class="table table-hover" id="instructor_table">
-  <thead>
-    <tr>
-      <th scope="col" >Student Details<br/>&nbsp; </th>
-      {% for assignment in Assignmentdata %}
-                {% if assignment[0]["id"] == rows[0]["id"] %}
-                    <th scope="col">Grade - {{ assignment[1]["assignment_name"] }}<br/> Max. {{ assignment[1]["assignment_grade"] }}%</th>
-                {% endif %}
-      {% endfor %}
-      <th scope="col" >Overall Grade <br/> Max. 100%</th>
-    </tr>
-  </thead>
-  <tbody id="tbody">
-      {% for student in Studentdata %}
-        <tr>
-            <td>
-                {{ student[0]["first_name"] }}
-            </td>
-        </tr>
+                    <thead>
+                        <tr>
+                            <th scope="col" >Student ID<br/>&nbsp; </th>
+                            <th scope="col" >Name<br/>&nbsp; </th>
+                                {% for assignment in Assignmentdata %}
+                                    {% if assignment[0]["id"] == rows[0]["id"] %}
+                                        <th scope="col">Grade <br/>( {{ assignment[1]["assignment_name"] }} Max. {{ assignment[1]["assignment_grade"] }}%)</th>
+                                    {% endif %}
+                                {% endfor %}
+                            <th scope="col" >Overall Grade <br/> Earned</th>
+                            <th scope="col" >Overall Grade <br/> Max. 100%</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
 
-      {% endfor %}
-      </tbody>
-</table>
+                        {% for studentgroupdata in StudentGroupData %}
+                        <tr>
 
+                            {% if studentgroupdata[2]["id"] == rows[0]["id"] %}
+                                <td id ="studentid" class="studentid"><a class="btn btn-info mr-2" href='http://schoolgradebook.pythonanywhere.com/studentassignment?studentid={{studentgroupdata[0]["id"] }}'> {{ studentgroupdata[0]["student_id"] }}</a>  </td>
+                                <td id ="studentname" class="studentname"> {{ studentgroupdata[0]["first_name"] }} {{ studentgroupdata[0]["last_name"] }} </td>
+                            {% endif %}
+
+                          {% for assignmentdata in Assignmentdata %}
+                                    {% if assignmentdata[0]["id"] == rows[0]["id"]  %}
+
+                                        {% for studentassignmentdata in StudentAssignmentdata %}
+                                            {% if studentassignmentdata[3]["id"] == rows[0]["id"]  and studentgroupdata[0]["id"] == studentassignmentdata[0]["id"] and assignmentdata[1]["id"] == studentassignmentdata[2]["id"] %}
+                                                <td id ="{{ assignmentdata[1]["assignment_name"] }}" class="{{ assignmentdata[1]["assignment_name"] }}"> {{ studentassignmentdata[1]["GradeTaken"] }} </td>
+
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    {% endif %}
+                          {% endfor %}
+
+                        {% for assignmentdata in Assignmentdata %}
+                                    {% if assignmentdata[0]["id"] == rows[0]["id"]  %}
+
+                                        {% for studentassignmentdata in StudentAssignmentdata %}
+                                            {% if studentassignmentdata[3]["id"] == rows[0]["id"]  and studentgroupdata[0]["id"] == studentassignmentdata[0]["id"] and assignmentdata[1]["id"] == studentassignmentdata[2]["id"] %}
+                                                {% for studentgradetotal in StudentGradeTotal %}
+                                                       {% if studentgradetotal[0] == rows[0]["id"]  and studentgradetotal[1] == studentgroupdata[0]["id"] and studentgradetotal[2] == studentassignmentdata[2]["id"] %}
+                                                            <td id ="total" class="total"> {{ studentgradetotal[3] }}  </td>
+                                                        {% endif %}
+                                                {% endfor %}
+
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    {% endif %}
+                          {% endfor %}
+
+
+                            {% if studentgroupdata[2]["id"] == rows[0]["id"] %}
+
+                                <td id ="max" class="max"> 100 </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </p>
         </div>
     </div>
 {% endfor %}
-
-                </div>
-
-
-
-
-
-        </div>
-      </div>
-
-    </section>
+</div>
+</div>
+</div>
+</section>
 
 <script>
 

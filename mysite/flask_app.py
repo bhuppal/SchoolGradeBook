@@ -341,18 +341,19 @@ def studentassignmentupdate():
 
     return redirect(url_for('index'))
 
-
 @app.route('/grade', methods=["GET","POST"])
 def grade():
     if request.method == "GET":
         Coursedata = db.session.query(Course, Instructor).join(Instructor, Instructor.id == Course.instructor_id).all()
-        Assignmentdata = db.session.query(Course, Assignment).join(Course, Course.id == Assignment.courses).all()
+        Assignmentdata = db.session.query(Course, Assignment).join(Course, Course.id == Assignment.courses).order_by(Assignment.assignment_name).all()
+        StudentGradeTotal = db.session.query(StudentAssignment.course,StudentAssignment.student,StudentAssignment.assignment, db.func.sum(StudentAssignment.GradeTaken)).group_by(StudentAssignment.student).all()
         Studentdata = db.session.query(Student, StudentAssignment, Course).join(Student, Student.id == StudentAssignment.student).join(Course, Course.id == StudentAssignment.course).all()
-        return render_template("grade.html", title = 'Grade Details', Coursedata = Coursedata, Assignmentdata = Assignmentdata, Studentdata = Studentdata)
+        StudentGroupData = db.session.query(Student, StudentAssignment, Course).join(Student, Student.id == StudentAssignment.student).join(Course, Course.id == StudentAssignment.course).group_by(StudentAssignment.student).order_by(Student.first_name).all()
+        StudentAssignmentdata = db.session.query(Student, StudentAssignment, Assignment, Course).join(Student, Student.id == StudentAssignment.student).join(Assignment, Assignment.id == StudentAssignment.assignment).join(Course, Course.id == Assignment.courses).order_by(Assignment.assignment_name).all()
+        return render_template("grade.html", title = 'Grade Details', Coursedata = Coursedata, Assignmentdata = Assignmentdata, Studentdata = Studentdata, StudentAssignmentdata = StudentAssignmentdata, StudentGroupData = StudentGroupData, StudentGradeTotal = StudentGradeTotal)
 
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
-
     return redirect(url_for('grade'))
 
 
