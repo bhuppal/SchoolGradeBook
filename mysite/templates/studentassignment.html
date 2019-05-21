@@ -55,7 +55,7 @@
     <tr>
 
         <td>{{ rows[3]["assignment_name"] }}</td>
-        <td><form action='http://schoolgradebook.pythonanywhere.com/studentassignment' method='POST'><input type="hidden" id="studentassignmentid" name="studentassignmentid" value={{ rows[0]["id"] }}><input type="hidden" id="studentid" name="studentid" value={{ studentid }}><div class="form-group"><input type="text" class="form-control d-inline-block" style="width:50px;" id="gradetaken" name="gradetaken" value={{ rows[0]["GradeTaken"] }}><button type="submit" class="btn btn-success btn-sm" role="button"> Save</button> </div></form></td>
+        <td><form action='http://schoolgradebook.pythonanywhere.com/studentassignment' method='POST'><input type="hidden" id="studentassignmentid" name="studentassignmentid" value={{ rows[0]["id"] }}><input type="hidden" id="studentid" name="studentid" value={{ studentid }} ><div class="form-group"><i class="fas fa-asterisk fa-sm text-danger"></i><input type="text" class="form-control d-inline-block" style="width:50px;" id="gradetaken" name="gradetaken" value={{ rows[0]["GradeTaken"] }} min="1" max="25"><button type="submit" class="btn btn-success btn-sm" role="button"> Save</button> </div></form></td>
         <td>{{ rows[3]["assignment_grade"] }}</td>
         <td>{{ rows[2]["title"] }}{{ rows[2]["first_name"] }} {{ rows[2]["last_name"] }}</td>
         <td>{{ rows[1]["course_name"] }}</td>

@@ -8,40 +8,40 @@
                 <br/>
                 <div id="GradeDetails">
 
-                    <table id="table" class="table table-hover" id="grade_table">
+{% for rows in Coursedata %}
+    <div class="card mb-3">
+        <h5 class="card-header">{{ rows[0]["course_name"] }}</h5>
+        <div class="card-body">
+            <h5 class="card-title d-inline-block mr-5">Instructor: {{ rows[1]["title"] }}{{ rows[1]["first_name"] }} {{ rows[1]["last_name"] }}</h5> Start Date: {{ rows[0]["course_startdate"].strftime("%A, %d %B %Y") }}  - End Date: {{ rows[0]["course_enddate"].strftime("%A, %d %B %Y")  }}
+            <p class="card-text">
+                <table id="table" class="table table-hover" id="instructor_table">
   <thead>
     <tr>
-      <th scope="col">Student ID</th>
-      <th scope="col">Name</th>
-      <th scope="col">Course</th>
-      <th scope="col">Instructor</th>
-      <th scope="col">Grade 1(Disc.)</th>
-      <th scope="col">Grade 2(HW)</th>
-      <th scope="col">Grade 3(Proj)</th>
-      <th scope="col">Grade 4(Exam)</th>
-      <th scope="col">Overall Grade</th>
+      <th scope="col" >Student Details<br/>&nbsp; </th>
+      {% for assignment in Assignmentdata %}
+                {% if assignment[0]["id"] == rows[0]["id"] %}
+                    <th scope="col">Grade - {{ assignment[1]["assignment_name"] }}<br/> Max. {{ assignment[1]["assignment_grade"] }}%</th>
+                {% endif %}
+      {% endfor %}
+      <th scope="col" >Overall Grade <br/> Max. 100%</th>
     </tr>
   </thead>
+  <tbody id="tbody">
+      {% for student in Studentdata %}
+        <tr>
+            <td>
+                {{ student[0]["first_name"] }}
+            </td>
+        </tr>
 
-<tbody id="tbody">
-      {% for rows in Gradedata %}
-    <tr>
-        <td>{{ rows[0]["student_id"] }}</td>
-        <td>{{ rows[0]["first_name"] }} {{ rows[0]["last_name"] }}</td>
-        <td>{{ rows[2]["course_name"] }} </td>
-        <td>{{ rows[3]["title"] }} {{ rows[3]["first_name"] }} {{ rows[3]["last_name"] }}</td>
-        <td>{{ rows[1]["AssignmentName"] }} </td>
-        <td>{{ rows[1]["GradeTaken"] }} </td>
-
-    </tr>
-  {% endfor %}
-</tbody>
-
+      {% endfor %}
+      </tbody>
 </table>
-<button type="button" class="btn btn-info">
-  Record count:  <span id="recordcount" class="badge badge-pill badge-dark"></span>
-</button>
 
+            </p>
+        </div>
+    </div>
+{% endfor %}
 
                 </div>
 

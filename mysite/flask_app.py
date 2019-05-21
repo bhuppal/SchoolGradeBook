@@ -2,6 +2,7 @@
 from datetime import datetime
 from flask import Flask, redirect, render_template, request, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from flask_migrate import Migrate
 from flask_login import login_user, LoginManager, UserMixin, login_required, logout_user, current_user
 from werkzeug.security import check_password_hash
@@ -316,7 +317,7 @@ def studentassignment():
         studentassignmentrecord.GradeTaken = gradetaken
         db.session.commit()
         studentrecord = Student.query.filter_by(id = studentid).first()
-        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentrecord = studentrecord, studentid = studentid, recordcount = recordcount, studentassignmentid = studentassignmentid, gradetaken = gradetaken, message = 'Updated successfully.')
+        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor, Assignment).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).join(Assignment, Assignment.id == StudentAssignment.assignment).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentrecord = studentrecord, studentid = studentid, recordcount = recordcount, studentassignmentid = studentassignmentid, gradetaken = gradetaken, message = 'Updated successfully.')
 
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
@@ -333,7 +334,7 @@ def studentassignmentupdate():
         studentassignmentrecord = StudentAssignment.query.filter_by(id = studentassignmentid).first()
         studentassignmentrecord.GradeTaken = gradetaken
         db.session.commit()
-        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentid = studentid, recordcount = recordcount, studentassignmentid = studentassignmentid, gradetaken = gradetaken)
+        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor, Assignment).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).join(Assignment, Assignment.id == StudentAssignment.assignment).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentid = studentid, recordcount = recordcount, studentassignmentid = studentassignmentid, gradetaken = gradetaken)
 
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
@@ -344,8 +345,10 @@ def studentassignmentupdate():
 @app.route('/grade', methods=["GET","POST"])
 def grade():
     if request.method == "GET":
-        gradedata = db.session.query(Student,StudentAssignment, Course, Instructor).join(Student, Student.id == StudentAssignment.student).join(Course, Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).order_by(Student.first_name).all()
-        return render_template("grade.html", title = 'Grade Details', Gradedata = gradedata)
+        Coursedata = db.session.query(Course, Instructor).join(Instructor, Instructor.id == Course.instructor_id).all()
+        Assignmentdata = db.session.query(Course, Assignment).join(Course, Course.id == Assignment.courses).all()
+        Studentdata = db.session.query(Student, StudentAssignment, Course).join(Student, Student.id == StudentAssignment.student).join(Course, Course.id == StudentAssignment.course).all()
+        return render_template("grade.html", title = 'Grade Details', Coursedata = Coursedata, Assignmentdata = Assignmentdata, Studentdata = Studentdata)
 
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
