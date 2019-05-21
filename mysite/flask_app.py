@@ -150,7 +150,7 @@ class Assignment(db.Model):
     assignment_duedate = db.Column(db.DateTime)
     assignment_grade = db.Column(db.Integer)
     courses = db.Column(db.Integer, db.ForeignKey('sgb_Course.id'))
-
+    student = db.relationship('StudentAssignment', backref='student_assignments')
 
     def json(self):
         return {
@@ -216,19 +216,15 @@ class StudentAssignment(db.Model):
     __tablename__ = "sgb_StudentAssignment"
 
     id = db.Column(db.Integer, primary_key=True)
-    AssignmentName = db.Column(db.String(150))
     GradeTaken = db.Column(db.Integer)
-    GradeMax = db.Column(db.Integer)
     student = db.Column(db.Integer, db.ForeignKey('sgb_Student.id'))
     course = db.Column(db.Integer, db.ForeignKey('sgb_Course.id'))
-
+    assignment = db.Column(db.Integer, db.ForeignKey('sgb_Assignment.id'))
 
     def json(self):
         return {
                 'id': self.id,
-                'AssignmentName': self.AssignmentName,
-                'GradeTaken': self.GradeTaken,
-                'GradeMax': self.GradeMax
+                'GradeTaken': self.GradeTaken
         }
 
 
@@ -238,9 +234,7 @@ class StudentAssignment(db.Model):
     def __repr__(self):
         studentassignment_object = {
                 'id': self.id,
-                'AssignmentName': self.AssignmentName,
-                'GradeTaken': self.GradeTaken,
-                'GradeMax': self.GradeMax
+                'GradeTaken': self.GradeTaken
         }
         return json.dumps(studentassignment_object)
 
@@ -311,7 +305,7 @@ def studentassignment():
         studentid = request.args.get('studentid')
         recordcount = StudentAssignment.query.filter_by(student = studentid).count()
         studentrecord = Student.query.filter_by(id = studentid).first()
-        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentrecord = studentrecord, studentid = studentid, recordcount = recordcount)
+        return render_template("studentassignment.html", title = 'Student Details', studentassignment=db.session.query(StudentAssignment,Course,Instructor, Assignment).join(Course,Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).join(Assignment, Assignment.id == StudentAssignment.assignment).filter(StudentAssignment.student == studentid).order_by(Course.id).all(), studentrecord = studentrecord, studentid = studentid, recordcount = recordcount)
 
     if request.method == "POST":
         studentassignmentid = request.form['studentassignmentid']
@@ -346,15 +340,18 @@ def studentassignmentupdate():
 
     return redirect(url_for('index'))
 
+
 @app.route('/grade', methods=["GET","POST"])
 def grade():
     if request.method == "GET":
-        return render_template("grade.html", title = 'Grade Details')
+        gradedata = db.session.query(Student,StudentAssignment, Course, Instructor).join(Student, Student.id == StudentAssignment.student).join(Course, Course.id == StudentAssignment.course).join(Instructor, Instructor.id == Course.instructor_id).order_by(Student.first_name).all()
+        return render_template("grade.html", title = 'Grade Details', Gradedata = gradedata)
 
     if not current_user.is_authenticated:
         return render_template("login_page.html", error=True)
 
     return redirect(url_for('grade'))
+
 
 @app.route('/instructor', methods=["GET","POST"])
 def instructor():
@@ -434,6 +431,10 @@ def get_all_instructor():
     recordcount =  Instructor.query.count();
     return jsonify({'instructor': Instructor.get_all_instructors(), 'record':recordcount})
 
+@app.route('/api/test', methods=['GET'])
+def test():
+    recordcount =  db.engine.execute('select * from users')
+    return jsonify({'instructor': recordcount})
 
 @app.route('/api/course', methods=['GET'])
 def get_all_course():

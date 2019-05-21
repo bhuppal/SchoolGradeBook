@@ -7,6 +7,7 @@
             <div class="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
                 <br/>
                 <div id="GradeDetails">
+
                     <table id="table" class="table table-hover" id="grade_table">
   <thead>
     <tr>
@@ -14,16 +15,27 @@
       <th scope="col">Name</th>
       <th scope="col">Course</th>
       <th scope="col">Instructor</th>
-      <th scope="col">Grade 1</th>
-      <th scope="col">Grade 2</th>
-      <th scope="col">Grade 3</th>
-      <th scope="col">Grade 4</th>
+      <th scope="col">Grade 1(Disc.)</th>
+      <th scope="col">Grade 2(HW)</th>
+      <th scope="col">Grade 3(Proj)</th>
+      <th scope="col">Grade 4(Exam)</th>
       <th scope="col">Overall Grade</th>
     </tr>
   </thead>
 
 <tbody id="tbody">
-     </tbody>
+      {% for rows in Gradedata %}
+    <tr>
+        <td>{{ rows[0]["student_id"] }}</td>
+        <td>{{ rows[0]["first_name"] }} {{ rows[0]["last_name"] }}</td>
+        <td>{{ rows[2]["course_name"] }} </td>
+        <td>{{ rows[3]["title"] }} {{ rows[3]["first_name"] }} {{ rows[3]["last_name"] }}</td>
+        <td>{{ rows[1]["AssignmentName"] }} </td>
+        <td>{{ rows[1]["GradeTaken"] }} </td>
+
+    </tr>
+  {% endfor %}
+</tbody>
 
 </table>
 <button type="button" class="btn btn-info">
@@ -44,28 +56,7 @@
 
 <script>
 
-$(document).ready(function () {
-$.getJSON('http://schoolgradebook.pythonanywhere.com/api/instructor', function (arr) {
-        console.log(arr);
-        var instructor_data = '';
-        var i;
-        for(i = 0; i < arr.instructor.length; i++) {
-            instructor_data += '<tr>';
-            instructor_data += '<td>' +arr.instructor[i].title+'</td>';
-            instructor_data += '<td>' +arr.instructor[i].first_name+'</td>';
-            instructor_data += '<td>' +arr.instructor[i].last_name+'</td>';
-            instructor_data += '<td>' +arr.instructor[i].position+'</td>';
-            instructor_data += '<td>' +arr.instructor[i].email+'</td>';
-            instructor_data += '<td>' +arr.instructor[i].phone+'</td>';
-            instructor_data += '<td>' +arr.instructor[i].notes+'</td>';
-            instructor_data += '</tr>';
-        }
 
-        $('#tbody').append(instructor_data);
-        $('#recordcount').append(arr.record);
-
-    });
-});
 
 
 </script>
