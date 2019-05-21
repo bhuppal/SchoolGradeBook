@@ -1,6 +1,6 @@
 # A very simple Flask Hello World app for you to get started with...
 from datetime import datetime
-from flask import Flask, redirect, render_template, request, url_for, jsonify
+from flask import Flask, redirect, render_template, request, url_for, jsonify, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_migrate import Migrate
@@ -247,36 +247,36 @@ def load_user(user_id):
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
-    if request.method == "GET":
-        return render_template("login_page.html", error=False)
+    if request.method == 'GET':
+            return render_template("login_page.html", error=False)
 
-    user = load_user(request.form["username"])
-    if user is None:
-        return render_template("login_page.html", error=True)
-
-    if not user.check_password(request.form["password"]):
-        return render_template("login_page.html", error=True)
-
-    login_user(user)
-    return redirect(url_for('index'))
-
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        session['logged_in'] = True
+        user = load_user(request.form["username"])
+        if user is None:
+            return render_template("login_page.html", error=True)
+        if not user.check_password(request.form["password"]):
+            return render_template("login_page.html", error=True)
+        login_user(user)
+        return redirect(url_for('index'))
 
 
 @app.route('/logout/')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    session['logged_in'] = False
+    return render_template("login_page.html", error=False)
 
 
 
 @app.route('/', methods=["GET","POST"])
 def index():
-    if request.method == "GET":
+    if not session.get('logged_in'):
+        return render_template("login_page.html", error=False)
+    else:
         return render_template("student.html", timestamp=datetime.now(),title = 'Student Details', student = Student.query.all(), recordcount = Student.query.count())
-
-    if not current_user.is_authenticated:
-        return render_template("login_page.html", error=True)
 
     return redirect(url_for('index'))
 
