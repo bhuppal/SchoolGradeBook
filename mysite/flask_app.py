@@ -405,17 +405,47 @@ def assignment():
     return redirect(url_for('assignment'))
 
 
+
+@app.route('/assignmentadd', methods=['GET','POST'])
+def assignmentadd():
+    if request.method == "GET":
+        course_id = request.args.get('Courseid')
+        coursedata = Course.query.filter_by(course_id = course_id).first()
+        data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.course_id == course_id).order_by(Course.id).all()
+        recordcount =  Assignment.query.filter_by(courses = coursedata.id).count()
+        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata, recordcount = recordcount)
+
+    if request.method == "POST":
+        AddAssignment = Assignment(assignment_name=request.form["assignment_name"], assignment_grade=request.form["assignment_grade"], assignment_startdate=request.form["assignment_startdate"], assignment_duedate=request.form["assignment_duedate"], courses = request.form["courses"])
+        db.session.add(AddAssignment)
+        db.session.commit()
+        course_id = request.form["courses"]
+        coursedata = Course.query.filter_by(id = course_id).first()
+        recordcount = Assignment.query.filter_by(courses = coursedata.id).count()
+        data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.id == course_id).order_by(Course.id).all()
+        return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata, recordcount = recordcount)
+    else:
+        return redirect(url_for('assignment'))
+
+    if not current_user.is_authenticated:
+        return render_template("login_page.html", error=True)
+
+    return redirect(url_for('assignment'))
+
+
+
+
 @app.route('/delassignment', methods=['GET','POST'])
 def delete_assignment():
     if request.method == "GET":
         assignmentid = request.args.get('assignmentid')
-        delassignmentrecord =  Assignment.query.filter_by(id=assignmentid).first()
+        delassignmentrecord =  Assignment.query.filter_by(id = assignmentid).first()
         db.session.delete(delassignmentrecord)
         db.session.commit()
-        course_id = request.args.get('courseid')
-        coursedata = Course.query.filter_by(course_id = course_id).first()
+        course_id = request.args.get('courses')
+        coursedata = Course.query.filter_by(id = course_id).first()
         recordcount = Assignment.query.filter_by(courses = coursedata.id).count()
-        data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.course_id == course_id).order_by(Course.id).all()
+        data = db.session.query(Course.id, Course.course_name, Assignment.id, Assignment.assignment_name, Assignment.assignment_grade, Assignment.assignment_startdate, Assignment.assignment_duedate).join(Course,Course.id == Assignment.courses).filter(Course.id == course_id).order_by(Course.id).all()
         return render_template("assignment.html", timestamp=datetime.now(), title = 'Assignment Details', course_id = course_id, AssignmentDetails = data, course_name = coursedata, recordcount = recordcount)
 
 
